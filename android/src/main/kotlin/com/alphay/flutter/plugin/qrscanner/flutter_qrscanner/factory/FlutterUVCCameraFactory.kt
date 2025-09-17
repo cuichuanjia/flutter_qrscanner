@@ -16,6 +16,8 @@ class FlutterUVCCameraFactory(private val messenger: BinaryMessenger, private va
         viewId: Int,
         args: Any?
     ): PlatformView {
-        return FlutterUVCCameraView(context, viewId, messenger, activityBinding)
+        // 确保使用正确的 context，优先使用 Activity 的 context
+        val actualContext = activityBinding.activity ?: context
+        return FlutterUVCCameraView(actualContext, viewId, messenger, activityBinding)
     }
 }

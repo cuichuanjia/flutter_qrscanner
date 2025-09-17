@@ -91,6 +91,11 @@ class FlutterQrscannerWidget extends StatelessWidget {
       _startQrScan(channel);
     } on PlatformException catch (e) {
       print('摄像头初始化失败: ${e.message}');
+      // 调用扫描提示回调，通知初始化失败
+      scanTips(4, '摄像头初始化失败');
+    } catch (e) {
+      print('未知错误: $e');
+      scanTips(4, '摄像头初始化失败');
     }
   }
 }

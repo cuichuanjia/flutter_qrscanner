@@ -45,12 +45,14 @@ class FlutterQrscannerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         activityBinding!!
                     )
                 )
-                Log.i(TAG, "UI注册成功")
+                Log.i(TAG, "Platform view factory 注册成功")
                 isViewFactoryRegistered = true
             } catch (e: Exception) {
                 // 如果注册失败，记录错误但不崩溃
-                Log.e("FlutterFaceaiPlugin", "Failed to register view factory", e)
+                Log.e(TAG, "Failed to register view factory", e)
             }
+        } else {
+            Log.w(TAG, "Cannot register view factory: isRegistered=$isViewFactoryRegistered, binding=${flutterPluginBinding != null}, activity=${activityBinding != null}")
         }
     }
 
@@ -88,6 +90,8 @@ class FlutterQrscannerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         this.activityBinding = binding
+        // 在 Activity 绑定后立即注册 view factory
+        registerViewFactoryIfNeeded()
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -96,7 +100,8 @@ class FlutterQrscannerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         this.activityBinding = binding
-
+        // 重新注册 view factory
+        registerViewFactoryIfNeeded()
     }
 
     override fun onDetachedFromActivity() {

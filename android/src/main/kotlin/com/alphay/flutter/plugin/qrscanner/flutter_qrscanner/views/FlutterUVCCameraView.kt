@@ -29,7 +29,12 @@ class FlutterUVCCameraView(
     private var TAG: String = "FlutterUVCCameraView"
 
     init {
+        // 确保使用正确的 context 来创建 view
         nativeView = LayoutInflater.from(context).inflate(R.layout.view_camera, null, false)
+        // 确保 view 与 context 正确关联
+        if (nativeView.parent != null) {
+            (nativeView.parent as? android.view.ViewGroup)?.removeView(nativeView)
+        }
         channel = MethodChannel(messenger, "flutter_qrscanner_view_" + viewId)
         channel.setMethodCallHandler(this)
     }
