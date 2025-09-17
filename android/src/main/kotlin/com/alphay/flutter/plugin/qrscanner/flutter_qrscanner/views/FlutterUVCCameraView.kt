@@ -2,6 +2,7 @@ package com.alphay.flutter.plugin.qrscanner.flutter_qrscanner.views
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,11 @@ class FlutterUVCCameraView(
         }
         channel = MethodChannel(messenger, "flutter_qrscanner_view_" + viewId)
         channel.setMethodCallHandler(this)
+        
+        // 添加Android版本兼容性检查
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Log.w(TAG, "当前Android版本 ${Build.VERSION.SDK_INT} 可能存在ImageTextureEntry fence兼容性问题")
+        }
     }
 
     private fun initCamera(param: Map<String, Any>) {

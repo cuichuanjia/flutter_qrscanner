@@ -102,17 +102,25 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
                         override fun onFrame(byteBuffer: ByteBuffer) {
                             //转为bitmap 后
                             faceAIAnalysisCallBack?.let { callback ->
+                                try {
 //                            val t1 = System.currentTimeMillis()
-                                reuseBitmap = convertNV21ToBitmap(
-                                    byteBuffer,
-                                    width,
-                                    height,
-                                    cameraBuilder.degree,
-                                    cameraBuilder.isHorizontalMirror
-                                )
+                                    reuseBitmap = convertNV21ToBitmap(
+                                        byteBuffer,
+                                        width,
+                                        height,
+                                        cameraBuilder.degree,
+                                        cameraBuilder.isHorizontalMirror
+                                    )
 //                            Log.e("DataConvertUtils", "${width}转化用时：${System.currentTimeMillis() - t1}")
 
-                                callback.onBitmapFrame(reuseBitmap!!)
+                                    // 检查bitmap是否有效
+                                    if (reuseBitmap != null && !reuseBitmap!!.isRecycled) {
+                                        callback.onBitmapFrame(reuseBitmap!!)
+                                    }
+                                } catch (e: Exception) {
+                                    // 捕获可能的fence相关异常
+                                    android.util.Log.w("FlutterUVCCameraManager", "图像处理异常，可能是fence兼容性问题: ${e.message}")
+                                }
                             }
                         }
                     }, UVCCamera.PIXEL_FORMAT_NV21)
