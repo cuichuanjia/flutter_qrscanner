@@ -16,7 +16,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.util.*
 
 object FlutterQrscannerEngine {
-    private const val TAG = "FlutterQrscannerEngine"
+    private const val TAG = "FlutterQRScannerEngine"
     
     private var channel: MethodChannel? = null
     private var isScanning = false

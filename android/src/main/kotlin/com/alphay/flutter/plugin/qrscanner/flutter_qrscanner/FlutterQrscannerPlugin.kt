@@ -39,13 +39,13 @@ class FlutterQrscannerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             try {
                 // 注册原生视图工厂
                 flutterPluginBinding!!.platformViewRegistry.registerViewFactory(
-                    "flutter_uvc_camera_view",
+                    "flutter_qrscanner_camera_view",
                     FlutterUVCCameraFactory(
                         flutterPluginBinding!!.binaryMessenger,
                         activityBinding!!
                     )
                 )
-                Log.i(TAG, "Platform view factory 注册成功")
+                Log.i(TAG, "QR Scanner Platform view factory 注册成功")
                 isViewFactoryRegistered = true
             } catch (e: Exception) {
                 // 如果注册失败，记录错误但不崩溃

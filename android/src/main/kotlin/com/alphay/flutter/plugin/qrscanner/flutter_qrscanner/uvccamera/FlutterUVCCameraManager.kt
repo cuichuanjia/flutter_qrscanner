@@ -119,7 +119,7 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
                                     }
                                 } catch (e: Exception) {
                                     // 捕获可能的fence相关异常
-                                    android.util.Log.w("FlutterUVCCameraManager", "图像处理异常，可能是fence兼容性问题: ${e.message}")
+                                    android.util.Log.w("FlutterQRScannerCameraManager", "图像处理异常，可能是fence兼容性问题: ${e.message}")
                                 }
                             }
                         }

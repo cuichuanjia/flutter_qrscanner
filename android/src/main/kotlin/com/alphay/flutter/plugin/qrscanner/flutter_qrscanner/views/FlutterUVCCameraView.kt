@@ -27,7 +27,7 @@ class FlutterUVCCameraView(
     private var nativeView: View
     private var cameraManager: FlutterUVCCameraManager? = null
     private var channel: MethodChannel
-    private var TAG: String = "FlutterUVCCameraView"
+    private var TAG: String = "FlutterQRScannerCameraView"
 
     init {
         // 确保使用正确的 context 来创建 view

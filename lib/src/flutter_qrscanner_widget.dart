@@ -61,7 +61,7 @@ class FlutterQrscannerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndroidView(
-      viewType: 'flutter_uvc_camera_view',
+      viewType: 'flutter_qrscanner_camera_view',
       onPlatformViewCreated: (viewId) {
         final channel = MethodChannel('flutter_qrscanner_view_$viewId');
         channel.setMethodCallHandler(
