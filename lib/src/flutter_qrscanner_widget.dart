@@ -82,20 +82,24 @@ class FlutterQrscannerWidget extends StatelessWidget {
   // 提取初始化方法，便于复用和异常处理
   Future<void> _initCamera(MethodChannel channel) async {
     try {
+      print('开始初始化摄像头...');
       await channel.invokeMethod('init', {
         "name": name,
         "key": camerakey,
         "horizontalMirror": horizontalMirror,
         "degree": degree,
       });
+      print('摄像头初始化成功，开始扫描...');
       _startQrScan(channel);
     } on PlatformException catch (e) {
       print('摄像头初始化失败: ${e.message}');
+      print('错误代码: ${e.code}');
+      print('错误详情: ${e.details}');
       // 调用扫描提示回调，通知初始化失败
-      scanTips(4, '摄像头初始化失败');
+      scanTips(4, '摄像头初始化失败: ${e.message}');
     } catch (e) {
       print('未知错误: $e');
-      scanTips(4, '摄像头初始化失败');
+      scanTips(4, '摄像头初始化失败: $e');
     }
   }
 }

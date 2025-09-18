@@ -36,6 +36,10 @@ class FlutterUVCCameraView(
         if (nativeView.parent != null) {
             (nativeView.parent as? android.view.ViewGroup)?.removeView(nativeView)
         }
+        
+        // 设置view的context关联
+        nativeView.context = context
+        
         channel = MethodChannel(messenger, "flutter_qrscanner_view_" + viewId)
         channel.setMethodCallHandler(this)
         
@@ -43,6 +47,8 @@ class FlutterUVCCameraView(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             Log.w(TAG, "当前Android版本 ${Build.VERSION.SDK_INT} 可能存在ImageTextureEntry fence兼容性问题")
         }
+        
+        Log.d(TAG, "FlutterUVCCameraView 初始化完成，viewId: $viewId")
     }
 
     private fun initCamera(param: Map<String, Any>) {
@@ -78,11 +84,18 @@ class FlutterUVCCameraView(
         call: MethodCall,
         result: MethodChannel.Result
     ) {
+        Log.d(TAG, "收到方法调用: ${call.method}")
         when (call.method) {
             "init" -> {
-                val param: Map<String, Any> = call.arguments as Map<String, Any>
-                initCamera(param)
-                result.success(true)
+                try {
+                    val param: Map<String, Any> = call.arguments as Map<String, Any>
+                    Log.d(TAG, "初始化摄像头，参数: $param")
+                    initCamera(param)
+                    result.success(true)
+                } catch (e: Exception) {
+                    Log.e(TAG, "初始化摄像头失败", e)
+                    result.error("INIT_ERROR", "摄像头初始化失败: ${e.message}", null)
+                }
             }
             "startQrScan" -> {
                 try {
