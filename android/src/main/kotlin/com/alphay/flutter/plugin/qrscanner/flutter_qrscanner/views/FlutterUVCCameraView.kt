@@ -37,9 +37,6 @@ class FlutterUVCCameraView(
             (nativeView.parent as? android.view.ViewGroup)?.removeView(nativeView)
         }
         
-        // 设置view的context关联
-        nativeView.context = context
-        
         channel = MethodChannel(messenger, "flutter_qrscanner_view_" + viewId)
         channel.setMethodCallHandler(this)
         
