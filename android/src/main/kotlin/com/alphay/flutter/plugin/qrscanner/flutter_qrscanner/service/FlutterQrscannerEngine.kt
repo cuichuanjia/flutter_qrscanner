@@ -17,12 +17,12 @@ import java.util.*
 
 object FlutterQrscannerEngine {
     private const val TAG = "FlutterQRScannerEngine"
-    
+
     private var channel: MethodChannel? = null
     private var isScanning = false
     private var isPaused = false
     private val mainHandler = Handler(Looper.getMainLooper())
-    
+
     private val reader = MultiFormatReader().apply {
         val hints = mapOf(
             DecodeHintType.POSSIBLE_FORMATS to listOf(
@@ -44,7 +44,7 @@ object FlutterQrscannerEngine {
         isScanning = true
         isPaused = false
         Log.d(TAG, "开始二维码扫描")
-        
+
         // 发送扫描就绪状态
         channel.invokeMethod("scanTips", mapOf("code" to 0))
     }
@@ -76,7 +76,7 @@ object FlutterQrscannerEngine {
             mainHandler.post {
                 channel?.invokeMethod("scanTips", mapOf("code" to 1))
             }
-            
+
             val result = decodeQRCode(bitmap)
             if (result != null) {
                 Log.d(TAG, "二维码识别成功: ${result.text}")
@@ -104,10 +104,10 @@ object FlutterQrscannerEngine {
             val height = bitmap.height
             val pixels = IntArray(width * height)
             bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-            
+
             val source = RGBLuminanceSource(width, height, pixels)
             val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
-            
+
             reader.decode(binaryBitmap)
         } catch (e: Exception) {
 //            Log.d(TAG, "二维码解码失败: ${e.message}")

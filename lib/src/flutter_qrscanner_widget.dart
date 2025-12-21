@@ -24,9 +24,9 @@ class FlutterQrscannerWidget extends StatelessWidget {
   final FlutterQrscannerController? controller;
 
   Future<void> _qrScanInit_onCompleted(
-    MethodCall call,
-    MethodChannel channel,
-  ) async {
+      MethodCall call,
+      MethodChannel channel,
+      ) async {
     if (call.method == 'qrCodeDetected') {
       final result = (call.arguments as Map).cast<String, dynamic>();
       final qrCode = result['qrCode'] as String;
@@ -65,7 +65,7 @@ class FlutterQrscannerWidget extends StatelessWidget {
       onPlatformViewCreated: (viewId) {
         final channel = MethodChannel('flutter_qrscanner_view_$viewId');
         channel.setMethodCallHandler(
-          (call) => _qrScanInit_onCompleted(call, channel),
+              (call) => _qrScanInit_onCompleted(call, channel),
         );
         // 如果提供了控制器，将MethodChannel设置到控制器中
         controller?.setChannel(channel);

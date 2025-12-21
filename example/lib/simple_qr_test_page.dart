@@ -215,9 +215,9 @@ class _SimpleQrTestPageState extends State<SimpleQrTestPage> {
                 borderRadius: BorderRadius.circular(12),
                 child: FlutterQrscannerWidget(
                   name: 'USB摄像头',
-                  camerakey: 'CAM1',
+                  camerakey: 'RGB',
                   horizontalMirror: true,
-                  degree: 180,
+                  degree: 0,
                   controller: _controller,
                   onQRCodeDetected: _onQRCodeDetected,
                   scanTips: _onScanTips,

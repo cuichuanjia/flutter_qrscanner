@@ -36,15 +36,15 @@ class FlutterUVCCameraView(
         if (nativeView.parent != null) {
             (nativeView.parent as? android.view.ViewGroup)?.removeView(nativeView)
         }
-        
+
         channel = MethodChannel(messenger, "flutter_qrscanner_view_" + viewId)
         channel.setMethodCallHandler(this)
-        
+
         // 添加Android版本兼容性检查
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             Log.w(TAG, "当前Android版本 ${Build.VERSION.SDK_INT} 可能存在ImageTextureEntry fence兼容性问题")
         }
-        
+
         Log.d(TAG, "FlutterUVCCameraView 初始化完成，viewId: $viewId")
     }
 
@@ -59,7 +59,7 @@ class FlutterUVCCameraView(
             .setContext(context)
             .build()
         cameraManager = FlutterUVCCameraManager(cameraBuilder)
-        
+
         // 设置二维码扫描回调
         cameraManager!!.setFaceAIAnalysis(object :
             FlutterUVCCameraManager.OnFaceAIAnalysisCallBack {

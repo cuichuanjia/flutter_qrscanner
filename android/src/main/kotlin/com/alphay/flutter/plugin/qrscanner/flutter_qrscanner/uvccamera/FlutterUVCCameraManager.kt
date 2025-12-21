@@ -234,7 +234,7 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
         try {
             val data = ByteArray(byteBuffer.remaining())
             byteBuffer.get(data)
-            
+
             val yuvImage = android.graphics.YuvImage(
                 data,
                 android.graphics.ImageFormat.NV21,
@@ -242,17 +242,17 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
                 height,
                 null
             )
-            
+
             val out = java.io.ByteArrayOutputStream()
             yuvImage.compressToJpeg(
                 android.graphics.Rect(0, 0, width, height),
                 100,
                 out
             )
-            
+
             val imageBytes = out.toByteArray()
             var bitmap = android.graphics.BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            
+
             // 应用旋转
             if (degree != 0) {
                 val matrix = android.graphics.Matrix()
@@ -267,7 +267,7 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
                     true
                 )
             }
-            
+
             // 应用水平镜像
             if (isHorizontalMirror) {
                 val matrix = android.graphics.Matrix()
@@ -282,7 +282,7 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
                     true
                 )
             }
-            
+
             return bitmap
         } catch (e: Exception) {
             e.printStackTrace()
