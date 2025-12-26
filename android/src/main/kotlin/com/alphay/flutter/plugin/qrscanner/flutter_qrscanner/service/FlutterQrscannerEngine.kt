@@ -66,7 +66,7 @@ object FlutterQrscannerEngine {
         Log.d(TAG, "恢复二维码扫描")
     }
 
-    fun processFrame(bitmap: Bitmap) {
+    fun processFrame(binaryBitmap: BinaryBitmap) {
         if (!isScanning || isPaused || channel == null) {
             return
         }
@@ -78,7 +78,7 @@ object FlutterQrscannerEngine {
                 channel?.invokeMethod("scanTips", mapOf("code" to 1))
             }
 
-            val result = decodeQRCode(bitmap)
+            val result = decodeQRCode(binaryBitmap)
             if (result != null) {
                 Log.d(TAG, "二维码识别成功: ${result.text}")
                 // 停止扫描避免重复识别
@@ -101,16 +101,8 @@ object FlutterQrscannerEngine {
         }
     }
 
-    private fun decodeQRCode(bitmap: Bitmap): Result? {
+    private fun decodeQRCode(binaryBitmap: BinaryBitmap): Result? {
         return try {
-            val width = bitmap.width
-            val height = bitmap.height
-            val pixels = IntArray(width * height)
-            bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-
-            val source = RGBLuminanceSource(width, height, pixels)
-            val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
-
             reader.decode(binaryBitmap)
         } catch (e: Exception) {
 //            Log.d(TAG, "二维码解码失败: ${e.message}")

@@ -6,6 +6,9 @@ import android.hardware.usb.UsbDevice
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.annotation.Nullable
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 import com.herohan.uvcapp.CameraHelper
 import com.herohan.uvcapp.ICameraHelper
 import com.serenegiant.opengl.renderer.MirrorMode
@@ -37,7 +40,7 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
 
     private var width = UVC_CAMERA_WIDTH
     private var height = UVC_CAMERA_HEIGHT
-    private var reuseBitmap: Bitmap? = null
+    private var reuseBitmap: BinaryBitmap? = null
 
     interface OnCameraStatusCallBack {
         fun onAttach(device: UsbDevice)
@@ -48,7 +51,7 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
      * 对每帧bitmap 进行分析，如果SDK上一帧还在处理就可以丢弃掉
      */
     interface OnFaceAIAnalysisCallBack {
-        fun onBitmapFrame(bitmap: Bitmap)
+        fun onBitmapFrame(bitmap: BinaryBitmap)
     }
 
 
@@ -104,22 +107,36 @@ class FlutterUVCCameraManager(private val cameraBuilder: FlutterCameraBuilder) {
                             faceAIAnalysisCallBack?.let { callback ->
                                 try {
 //                            val t1 = System.currentTimeMillis()
-                                    reuseBitmap = convertNV21ToBitmap(
-                                        byteBuffer,
-                                        width,
-                                        height,
-                                        cameraBuilder.degree,
-                                        cameraBuilder.isHorizontalMirror
-                                    )
+//                                    reuseBitmap = convertNV21ToBitmap(
+//                                        byteBuffer,
+//                                        width,
+//                                        height,
+//                                        cameraBuilder.degree,
+//                                        cameraBuilder.isHorizontalMirror
+//                                    )
+                                    val data = ByteArray(byteBuffer.remaining())
+                                    byteBuffer.get(data)
+
+
+                                    // 构建ZXing的亮度源（YUV的Y通道是亮度，足够识别二维码）
+                                    val source: PlanarYUVLuminanceSource = PlanarYUVLuminanceSource(
+                                        data, width, height,
+                                        0, 0, width, height,
+                                        false
+                                    ) // 不需要镜像翻转
+
+                                    // 转为二进制位图，用于识别
+                                    reuseBitmap = BinaryBitmap(HybridBinarizer(source))
+
 //                            Log.e("DataConvertUtils", "${width}转化用时：${System.currentTimeMillis() - t1}")
 
                                     // 检查bitmap是否有效
-                                    if (reuseBitmap != null && !reuseBitmap!!.isRecycled) {
+                                    if (reuseBitmap != null) {
                                         callback.onBitmapFrame(reuseBitmap!!)
                                     }
                                 } catch (e: Exception) {
                                     // 捕获可能的fence相关异常
-                                    android.util.Log.w("FlutterQRScannerCameraManager", "图像处理异常，可能是fence兼容性问题: ${e.message}")
+                                    android.util.Log.w("QRScannerCameraManager", "图像处理异常，可能是fence兼容性问题: ${e.message}")
                                 }
                             }
                         }

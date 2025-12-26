@@ -10,6 +10,7 @@ import com.alphay.flutter.plugin.qrscanner.flutter_qrscanner.R
 import com.alphay.flutter.plugin.qrscanner.flutter_qrscanner.service.FlutterQrscannerEngine
 import com.alphay.flutter.plugin.qrscanner.flutter_qrscanner.uvccamera.FlutterCameraBuilder
 import com.alphay.flutter.plugin.qrscanner.flutter_qrscanner.uvccamera.FlutterUVCCameraManager
+import com.google.zxing.BinaryBitmap
 import com.serenegiant.widget.AspectRatioSurfaceView
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
@@ -63,7 +64,7 @@ class FlutterUVCCameraView(
         // 设置二维码扫描回调
         cameraManager!!.setFaceAIAnalysis(object :
             FlutterUVCCameraManager.OnFaceAIAnalysisCallBack {
-            override fun onBitmapFrame(bitmap: Bitmap) {
+            override fun onBitmapFrame(bitmap: BinaryBitmap) {
                 FlutterQrscannerEngine.processFrame(bitmap)
             }
         })
