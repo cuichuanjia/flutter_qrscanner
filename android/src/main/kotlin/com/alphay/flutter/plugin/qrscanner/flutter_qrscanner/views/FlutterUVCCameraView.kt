@@ -31,7 +31,7 @@ class FlutterUVCCameraView(
 
     init {
         // 确保使用正确的 context 来创建 view
-        nativeView = LayoutInflater.from(context).inflate(R.layout.view_camera, null, false)
+        nativeView = LayoutInflater.from(context).inflate(R.layout.qrscanner_view_camera, null, false)
         // 确保 view 与 context 正确关联
         if (nativeView.parent != null) {
             (nativeView.parent as? android.view.ViewGroup)?.removeView(nativeView)
@@ -49,7 +49,7 @@ class FlutterUVCCameraView(
     }
 
     private fun initCamera(param: Map<String, Any>) {
-        var view: AspectRatioSurfaceView = nativeView.findViewById(R.id.surface_view)
+        var view: AspectRatioSurfaceView = nativeView.findViewById(R.id.qrscanner_surface_view)
         var cameraBuilder = FlutterCameraBuilder.Builder()
             .setCameraName(param.get("name") as String)
             .setCameraKey(param.get("key") as String)

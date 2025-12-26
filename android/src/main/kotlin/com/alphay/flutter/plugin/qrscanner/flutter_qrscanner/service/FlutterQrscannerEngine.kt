@@ -73,6 +73,7 @@ object FlutterQrscannerEngine {
 
         try {
             // 发送处理中状态 - 切换到主线程
+            isScanning = false
             mainHandler.post {
                 channel?.invokeMethod("scanTips", mapOf("code" to 1))
             }
@@ -95,6 +96,8 @@ object FlutterQrscannerEngine {
             mainHandler.post {
                 channel?.invokeMethod("scanTips", mapOf("code" to 3))
             }
+        } finally {
+            isScanning = true
         }
     }
 

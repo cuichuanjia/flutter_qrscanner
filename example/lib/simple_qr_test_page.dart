@@ -214,8 +214,8 @@ class _SimpleQrTestPageState extends State<SimpleQrTestPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: FlutterQrscannerWidget(
-                  name: 'USB摄像头',
-                  camerakey: 'RGB',
+                  name: '普通RGB摄像头',
+                  camerakey: 'CAM1',
                   horizontalMirror: true,
                   degree: 0,
                   controller: _controller,
